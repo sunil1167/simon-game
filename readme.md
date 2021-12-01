@@ -12,3 +12,11 @@
 
 * uncomment code in App.js while working on smart contract
 * lines : App.js : 58 - 60
+
+# how to run project
+
+> cd client
+>
+> npm install
+>
+> npm start
