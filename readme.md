@@ -1,22 +1,10 @@
-# create wallet logic function
+# What is it?
+Simon game connected to blockchain. User can connect the wallet, play the game and receive rewards based on level.
 
----
-
-> path : client -> src -> App.js : 51
-
-# game logic
-
-> path : public -> scripts -> game.js
-
-# note
-
-* uncomment code in App.js while working on smart contract
-* lines : App.js : 58 - 60
-
-# how to run project
-
-> cd client
->
-> npm install
->
-> npm start
+# How to run the application.
+1. Install metamask.
+2. git clone <repo>
+3. cd repo/client; npm install
+4. cd repo; truffle compile
+5. truffle development
+6. cd client; npm start 
