@@ -5,12 +5,12 @@ import Web3 from "web3";
 import "./App.css";
 
 class App extends Component {
-  state = { web3: null, accounts: null, contract: null };
+  state = { web3: null, accounts: null, contract: null, level: 0 };
   
   // Post component mount.
   componentDidMount = async () => {
       const web3 = new Web3(window.ethereum);
-      this.setState({ web3 });
+      this.setState({ web3, level: 0 });
       // Check if wallet is already connected.
       const _accounts = await window.ethereum.request({ method: 'eth_accounts' })
       if (_accounts.length === 0) {
@@ -19,6 +19,17 @@ class App extends Component {
         console.log("Metamask is Connected");
         await this.handleConnectWallet();
       }
+  };
+
+  // Game over, pay rewards.
+  handleGameOver = async () => {
+    try {
+      const level = this.state.level;
+      this.state.level = 0;
+      await this.state.contract.methods.payUser(level).send({ from: this.state.accounts[0] });
+    } catch (error) {
+      alert(`Error paying rewards!!` + error);
+    }
   };
 
   // Wallet connect code.
@@ -41,7 +52,10 @@ class App extends Component {
         this.setState({ accounts, contract });
         console.log("Loaded web3 and account: " + account);
         // [Sunil] Display account in the place of "Connect Wallet" and keep the button disabled.
-        // await contract.methods.addUser().send({ from: account });
+        const result = await contract.methods.gameUsers(account).call();
+        if (result === false) {
+          await contract.methods.addUser().send({ from: account });
+        }
       } catch (error) {
         alert(
           `Failed to load web3, accounts, or contract. Check console for details.`
