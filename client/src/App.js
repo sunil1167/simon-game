@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import SimoGameContract from "./contracts/SimonContract.json";
 import Web3 from "web3";
-
+import Game from './components/Game'
 import "./App.css";
 
 class App extends Component {
@@ -33,7 +33,8 @@ class App extends Component {
   };
 
   // Wallet connect code.
-  handleConnectWallet = async () => {
+  handleConnectWallet = async (e) => {
+    // e.target.disabled = true
     // [Sunil] Disable click button
     if (window.ethereum) {
       try {
@@ -69,6 +70,7 @@ class App extends Component {
   };
 
   render() {
+    console.log('this',this.state)
     if (!this.state.web3) {
       return <div>Loading Web3, accounts, and contract...</div>;
     }
@@ -80,12 +82,12 @@ class App extends Component {
             justifyContent: "flex-end",
           }}
         >
-          <button onClick={this.handleConnectWallet} className="connect_btn">
-            Connect Wallet
+          <button disabled={!!this.state.accounts} onClick={this.handleConnectWallet} className="connect_btn">
+            {this.state.accounts ? this.state.accounts[0] : 'Connect Wallet'} 
           </button>
         </div>
-        <h1 id="level-title">Press A Key to Start</h1>
-        <div className="container">
+        <Game />
+        {/* <div className="container">
           <div className="row">
             <div type="button" id="green" className="btn green"></div>
             <div type="button" id="red" className="btn red"></div>
@@ -95,7 +97,7 @@ class App extends Component {
             <div type="button" id="yellow" className="btn yellow"></div>
             <div type="button" id="blue" className="btn blue"></div>
           </div>
-        </div>
+        </div> */}
       </div>
     );
   }
