@@ -11,7 +11,6 @@ class App extends Component {
   componentDidMount = async () => {
       const web3 = new Web3(window.ethereum);
       this.setState({ web3, level: 0 });
-      // Check if wallet is already connected.
       const _accounts = await window.ethereum.request({ method: 'eth_accounts' })
       if (_accounts.length === 0) {
         console.log("Metamask is Disconnected");
@@ -24,19 +23,21 @@ class App extends Component {
   // Game over, pay rewards.
   handleGameOver = async (level) => {
     console.log('level',level)
+    if (level <=1 ) {
+      return;
+    }
     try {
-      // const level = this.state.level;
-      // this.state.level = 0;
-      await this.state.contract.methods.payUser(level).send({ from: this.state.accounts[0] });
+      const balance = await this.state.contract.methods.getBalance().call({from: this.state.accounts[0]});
+      if (balance > this.state.web3.utils.toWei(level.toString(), 'ether')) {
+        await this.state.contract.methods.payUser(level).send({ from: this.state.accounts[0] });
+      }
     } catch (error) {
-      alert(`Error paying rewards!!` + error);
+      console.log("Error paying rewards!!" + error);
     }
   };
 
   // Wallet connect code.
   handleConnectWallet = async (e) => {
-    // e.target.disabled = true
-    // [Sunil] Disable click button
     if (window.ethereum) {
       try {
         const web3 = this.state.web3;
@@ -53,7 +54,6 @@ class App extends Component {
         );
         this.setState({ accounts, contract });
         console.log("Loaded web3 and account: " + account);
-        // [Sunil] Display account in the place of "Connect Wallet" and keep the button disabled.
         const result = await contract.methods.gameUsers(account).call();
         if (result === false) {
           await contract.methods.addUser().send({ from: account });
@@ -63,7 +63,6 @@ class App extends Component {
           `Failed to load web3, accounts, or contract. Check console for details.`
         );
         console.error(error);
-        // [Sunil] Enable back the button.
       }
     } else {
       console.log("No web3 connection");

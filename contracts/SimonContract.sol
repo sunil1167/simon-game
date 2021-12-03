@@ -16,10 +16,14 @@ contract SimonContract {
         emit NewUser(msg.sender);
     }
 
+    function getBalance() public view returns(uint) {
+        return address(this).balance;
+    }
+
     function payUser(uint _level) public gameUserOnly {
+        require(address(this).balance >= (_level * 1 ether), "Not enough funds!!");
         address payable _to = payable(msg.sender);
         _to.transfer(_level * 1 ether);
-        gameUsers[msg.sender] = false;
         emit GameOverPayReward(msg.sender, _level);
     }
 
