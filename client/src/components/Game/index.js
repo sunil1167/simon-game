@@ -12,7 +12,7 @@ import {
 import { pickRandomItem } from "../../helper";
 import { Button, Container, ButtonsContainer } from "./style";
 
-export default function Game({handleGameOver}) {
+export default function Game({ handleGameOver }) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const {
     buttonColors,
@@ -26,6 +26,12 @@ export default function Game({handleGameOver}) {
 
   const handleClick = (btnColor) => (e) => {
     if (isGameStarted) {
+      let bodyEle = document.getElementById("root");
+      bodyEle.classList.add(btnColor);
+      setTimeout(() => {
+        bodyEle.classList.remove(btnColor);
+      }, 200);
+      playSound(btnColor);
       dispatch({
         type: BUTTON_CLICK,
         payload: btnColor,
@@ -41,8 +47,8 @@ export default function Game({handleGameOver}) {
   }, [isGameStarted]);
 
   const nextLevel = (level) => {
-    if(level > highscore) {
-        localStorage.setItem('highscore',level)
+    if (level > highscore) {
+      localStorage.setItem("highscore", level);
     }
     let randomColor = pickRandomItem(buttonColors);
     animate(randomColor);
@@ -68,6 +74,11 @@ export default function Game({handleGameOver}) {
     });
   }, []);
 
+  const playSound = (name) => {
+    var audio = new Audio("sounds/" + name + ".mp3");
+    audio.play();
+  };
+
   useEffect(() => {
     if (userClickedPattern.length !== 0) {
       let clickedLevelIndex = userClickedPattern.length - 1;
@@ -85,7 +96,8 @@ export default function Game({handleGameOver}) {
           type: GAME_OVER,
           payload: true,
         });
-        handleGameOver(level)
+        playSound("wrong");
+        handleGameOver(level);
       }
     }
   }, [userClickedPattern]);
