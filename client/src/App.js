@@ -22,10 +22,11 @@ class App extends Component {
   };
 
   // Game over, pay rewards.
-  handleGameOver = async () => {
+  handleGameOver = async (level) => {
+    console.log('level',level)
     try {
-      const level = this.state.level;
-      this.state.level = 0;
+      // const level = this.state.level;
+      // this.state.level = 0;
       await this.state.contract.methods.payUser(level).send({ from: this.state.accounts[0] });
     } catch (error) {
       alert(`Error paying rewards!!` + error);
@@ -86,7 +87,7 @@ class App extends Component {
             {this.state.accounts ? this.state.accounts[0] : 'Connect Wallet'} 
           </button>
         </div>
-        <Game />
+        <Game handleGameOver={this.handleGameOver} />
         {/* <div className="container">
           <div className="row">
             <div type="button" id="green" className="btn green"></div>

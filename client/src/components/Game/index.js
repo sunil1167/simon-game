@@ -12,7 +12,7 @@ import {
 import { pickRandomItem } from "../../helper";
 import { Button, Container, ButtonsContainer } from "./style";
 
-export default function Game() {
+export default function Game({handleGameOver}) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const {
     buttonColors,
@@ -85,6 +85,7 @@ export default function Game() {
           type: GAME_OVER,
           payload: true,
         });
+        handleGameOver(level)
       }
     }
   }, [userClickedPattern]);
