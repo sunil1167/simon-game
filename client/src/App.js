@@ -27,12 +27,9 @@ class App extends Component {
       return;
     }
     try {
-      const balance = await this.state.contract.methods.getBalance().call({from: this.state.accounts[0]});
-      if (balance > this.state.web3.utils.toWei(level.toString(), 'ether')) {
-        await this.state.contract.methods.payUser(level).send({ from: this.state.accounts[0] });
-      } else {
-        console.log("Not enough funds: ", balance);
-      }
+      // const balance = await this.state.contract.methods.getBalance().call({from: this.state.accounts[0]});
+      const result = await this.state.contract.methods.payUser(level).send({ from: this.state.accounts[0] });
+      console.log(result);
     } catch (error) {
       console.log("Error paying rewards!!" + error);
     }
