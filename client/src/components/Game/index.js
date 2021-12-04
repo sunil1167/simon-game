@@ -104,11 +104,11 @@ export default function Game({ handleGameOver }) {
 
   const animate = (colorId) => {
     let ele = document.getElementById(colorId);
-    let prevBg = ele.style.backgroundColor;
-    ele.style.backgroundColor = "#fff";
-    setTimeout(() => {
-      ele.style.backgroundColor = prevBg;
-    }, 300);
+    // let prevBg = ele.style.backgroundColor;
+    ele.classList.add('fade-out');
+      setTimeout(() => {
+        ele.classList.remove('fade-out');
+      }, 500);
   };
 
   return (
