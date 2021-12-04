@@ -26,10 +26,10 @@ export default function Game({ handleGameOver }) {
 
   const handleClick = (btnColor) => (e) => {
     if (isGameStarted) {
-      let bodyEle = document.getElementById("root");
-      bodyEle.classList.add(btnColor);
+      let bodyEle = document.getElementById(btnColor);
+      bodyEle.classList.add('pressed');
       setTimeout(() => {
-        bodyEle.classList.remove(btnColor);
+        bodyEle.classList.remove('pressed');
       }, 200);
       playSound(btnColor);
       dispatch({

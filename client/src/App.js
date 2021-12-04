@@ -22,7 +22,7 @@ class App extends Component {
 
   // Game over, pay rewards.
   handleGameOver = async (level) => {
-    console.log('level',level)
+    console.log('level',level);
     if (level <=1 ) {
       return;
     }
@@ -30,6 +30,8 @@ class App extends Component {
       const balance = await this.state.contract.methods.getBalance().call({from: this.state.accounts[0]});
       if (balance > this.state.web3.utils.toWei(level.toString(), 'ether')) {
         await this.state.contract.methods.payUser(level).send({ from: this.state.accounts[0] });
+      } else {
+        console.log("Not enough funds: ", balance);
       }
     } catch (error) {
       console.log("Error paying rewards!!" + error);
